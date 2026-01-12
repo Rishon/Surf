@@ -22,7 +22,7 @@ across environments.
 
 ```bash
 git clone https://github.com/Rishon/Surf.git
-cd surf
+cd Surf
 ```
 
 2. Build the project using the Gradle wrapper:
