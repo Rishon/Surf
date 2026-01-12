@@ -5,9 +5,12 @@ import lombok.Getter;
 import systems.rishon.surf.bootstrap.QuicProxyServer;
 import systems.rishon.surf.config.BackendServer;
 import systems.rishon.surf.config.ProxyConfig;
+import systems.rishon.surf.config.ProxyConfigLoader;
 import systems.rishon.surf.routing.JoinServerRouter;
 import systems.rishon.surf.session.ProxyPlayerSession;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.logging.Logger;
 
 public class SurfProxy {
@@ -22,7 +25,18 @@ public class SurfProxy {
         this.joinRouter = new JoinServerRouter(config);
     }
 
-    public void start() throws Exception {
+    static void main(String[] args) throws Exception {
+        try (InputStream inputStream = SurfProxy.class.getClassLoader().getResourceAsStream("surf.toml")) {
+            if (inputStream == null) {
+                throw new FileNotFoundException("surf.toml not found in resources");
+            }
+            ProxyConfig config = ProxyConfigLoader.load(inputStream);
+            SurfProxy proxy = new SurfProxy(config);
+            proxy.start();
+        }
+    }
+
+    public void start() {
         QuicProxyServer server = new QuicProxyServer(config, this);
         server.start();
     }

@@ -1,14 +1,16 @@
 [settings]
 max-players = 100
 offline-mode = false
+join-order = ["lobby", "survival"]
 
 [bind]
 host = "0.0.0.0"
 port = 5520
 
-[servers]
-lobby = "127.0.0.1:5521"
-survival = "127.0.0.1:5522"
+[servers.lobby]
+host = "127.0.0.1"
+port = 5521
 
-# The server order when a player logs in
-join-order = ["lobby", "survival"]
+[servers.survival]
+host = "127.0.0.1"
+port = 5522

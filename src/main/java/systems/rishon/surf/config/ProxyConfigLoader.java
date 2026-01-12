@@ -28,7 +28,14 @@ public final class ProxyConfigLoader {
         }
 
         String bindHost = bind.getString("host");
+        if (bindHost == null) {
+            throw new IllegalStateException("'bind.host' is missing");
+        }
+
         Long bindPort = bind.getLong("port");
+        if (bindPort == null) {
+            throw new IllegalStateException("'bind.port' is missing");
+        }
 
         Map<String, BackendServer> servers = new HashMap<>();
         TomlTable serversTable = toml.getTable("servers");
@@ -38,37 +45,40 @@ public final class ProxyConfigLoader {
         }
 
         for (String serverName : serversTable.keySet()) {
-            TomlTable server = serversTable.getTable(serverName);
-            if (server == null) {
+            TomlTable serverTable = serversTable.getTable(serverName);
+            if (serverTable == null) {
                 throw new IllegalStateException(
-                        "Server '" + serverName + "' configuration is invalid"
+                        "Server '" + serverName + "' must be a table with 'host' and 'port'"
                 );
             }
 
-            servers.put(
-                    serverName,
-                    new BackendServer(
-                            serverName,
-                            server.getString("host"),
-                            server.getLong("port")
-                    )
-            );
+            String host = serverTable.getString("host");
+            if (host == null) {
+                throw new IllegalStateException("Server '" + serverName + "' is missing 'host'");
+            }
+
+            Long port = serverTable.getLong("port");
+            if (port == null) {
+                throw new IllegalStateException("Server '" + serverName + "' is missing 'port'");
+            }
+
+            servers.put(serverName, new BackendServer(serverName, host, port));
         }
 
-        TomlArray joinOrderArray = toml.getArray("join-order");
+        TomlTable settings = toml.getTable("settings");
+        if (settings == null) {
+            throw new IllegalStateException("Missing 'settings' section");
+        }
+
+        TomlArray joinOrderArray = settings.getArray("join-order");
         if (joinOrderArray == null) {
-            throw new IllegalStateException("Missing 'join-order' configuration section");
+            throw new IllegalStateException("Missing 'join-order' in settings section");
         }
 
         List<String> joinOrder = joinOrderArray.toList().stream()
                 .map(Object::toString)
                 .toList();
 
-        return new ProxyConfig(
-                bindHost,
-                bindPort,
-                servers,
-                joinOrder
-        );
+        return new ProxyConfig(bindHost, bindPort, servers, joinOrder);
     }
 }

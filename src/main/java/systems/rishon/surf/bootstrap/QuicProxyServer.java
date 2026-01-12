@@ -1,11 +1,9 @@
 package systems.rishon.surf.bootstrap;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandler;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.socket.nio.NioDatagramChannel;
-import io.netty.handler.ssl.util.SelfSignedCertificate;
+import io.netty.handler.codec.quic.QuicChannel;
 import io.netty.incubator.codec.quic.QuicServerCodecBuilder;
 import io.netty.incubator.codec.quic.QuicSslContext;
 import io.netty.incubator.codec.quic.QuicSslContextBuilder;
@@ -15,6 +13,7 @@ import systems.rishon.surf.handler.ProxyInitialConnectionHandler;
 import systems.rishon.surf.transport.TransportSelector;
 
 import java.net.InetSocketAddress;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public final class QuicProxyServer {
@@ -31,28 +30,34 @@ public final class QuicProxyServer {
     public void start() {
         group = TransportSelector.createEventLoopGroup();
 
-        SelfSignedCertificate cert;
+        DynamicCert.KeyPairAndCert keyCert;
         try {
-            cert = SelfSignedCertificate.builder().build();
+            keyCert = DynamicCert.generate("Surf-Proxy");
         } catch (Exception e) {
-            throw new RuntimeException("Failed to create self-signed certificate", e);
+            throw new RuntimeException(e);
         }
 
-        QuicSslContext sslContext =
-                QuicSslContextBuilder.forServer(
-                        cert.privateKey(),
-                        null,
-                        cert.certificate()
-                ).applicationProtocols("hytale").build();
+        QuicSslContext sslContext = QuicSslContextBuilder.forServer(
+                keyCert.key(),
+                UUID.randomUUID().toString().replace("-", ""),
+                keyCert.cert()
+        ).applicationProtocols("Surf-Proxy").build();
 
-        ChannelHandler codec =
-                new QuicServerCodecBuilder()
-                        .sslContext(sslContext)
-                        .maxIdleTimeout(30, TimeUnit.SECONDS)
-                        .initialMaxData(10_000_000)
-                        .initialMaxStreamDataBidirectionalLocal(1_000_000)
-                        .initialMaxStreamsBidirectional(100)
-                        .build();
+        ChannelHandler codec = new QuicServerCodecBuilder()
+                .sslContext(sslContext)
+                .maxIdleTimeout(30, TimeUnit.SECONDS)
+                .maxIdleTimeout(30, TimeUnit.SECONDS)
+                .initialMaxData(10 * 1024 * 1024)
+                .initialMaxStreamDataBidirectionalLocal(1024 * 1024)
+                .initialMaxStreamsBidirectional(100)
+
+                .handler(new SimpleChannelInboundHandler<QuicChannel>() {
+                    @Override
+                    protected void channelRead0(ChannelHandlerContext ctx, QuicChannel msg) {
+                        proxy.getLogger().info("New QUIC channel connected: " + msg);
+                    }
+                })
+                .build();
 
         Bootstrap bootstrap = new Bootstrap();
         bootstrap.group(group)

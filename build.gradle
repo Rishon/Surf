@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'systems.rishon.surf'
-version = '1.0-SNAPSHOT'
+version = '0.1'
 
 repositories {
     mavenCentral()
@@ -13,6 +13,7 @@ dependencies {
     // Netty
     implementation(libs.netty.all)
     implementation(libs.netty.incubator.codec.native.quic)
+    runtimeOnly("io.netty.incubator:netty-incubator-codec-native-quic:0.0.74.Final:windows-x86_64")
 
     // Toml
     implementation(libs.tomlj)
@@ -21,11 +22,21 @@ dependencies {
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
 
+    // Security
+    implementation(libs.bouncy.castle.prov)
+    implementation(libs.bouncy.castle.pkix)
+
     // JUnit Tests
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.jupiter)
     testRuntimeOnly(libs.junit.platform.launcher)
 }
+
+tasks.register('runSurfProxy', JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass.set('systems.rishon.surf.SurfProxy')
+}
+
 
 test {
     useJUnitPlatform()

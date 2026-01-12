@@ -8,6 +8,9 @@ lombok = "1.18.42"
 netty-all = { module = "io.netty:netty-all", version.ref = "netty" }
 netty-incubator-codec-native-quic = { module = "io.netty.incubator:netty-incubator-codec-native-quic", version = "0.0.74.Final" }
 
+bouncy-castle-prov = { module = "org.bouncycastle:bcprov-jdk18on", version = "1.83" }
+bouncy-castle-pkix = { module = "org.bouncycastle:bcpkix-jdk18on", version = "1.83" }
+
 tomlj = { module = "org.tomlj:tomlj", version.ref = "tomlj" }
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
 
