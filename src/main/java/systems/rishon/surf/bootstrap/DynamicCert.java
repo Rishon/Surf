@@ -15,6 +15,7 @@ import java.security.PrivateKey;
 import java.security.Security;
 import java.security.cert.X509Certificate;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class DynamicCert {
 
@@ -29,7 +30,7 @@ public class DynamicCert {
 
         long now = System.currentTimeMillis();
         Date notBefore = new Date(now);
-        Date notAfter = new Date(now + 365L * 24 * 60 * 60 * 1000);
+        Date notAfter = new Date(now + TimeUnit.DAYS.toMillis(365));
 
         X500Name dnName = new X500Name("CN=" + commonName);
         BigInteger serial = BigInteger.valueOf(now);

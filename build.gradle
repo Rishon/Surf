@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'com.gradleup.shadow' version '9.3.0'
 }
 
 group = 'systems.rishon.surf'
@@ -13,7 +14,7 @@ dependencies {
     // Netty
     implementation(libs.netty.all)
     implementation(libs.netty.incubator.codec.native.quic)
-    runtimeOnly("io.netty.incubator:netty-incubator-codec-native-quic:0.0.74.Final:windows-x86_64")
+    runtimeOnly("io.netty.incubator:netty-incubator-codec-native-quic:0.0.74.Final:linux-x86_64")
 
     // Toml
     implementation(libs.tomlj)
@@ -32,11 +33,14 @@ dependencies {
     testRuntimeOnly(libs.junit.platform.launcher)
 }
 
-tasks.register('runSurfProxy', JavaExec) {
-    classpath = sourceSets.main.runtimeClasspath
-    mainClass.set('systems.rishon.surf.SurfProxy')
+shadowJar {
+    mergeServiceFiles()
+    manifest {
+        attributes(
+                'Main-Class': 'systems.rishon.surf.SurfProxy'
+        )
+    }
 }
-
 
 test {
     useJUnitPlatform()
