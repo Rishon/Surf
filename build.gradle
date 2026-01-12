@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+}
+
+group = 'systems.rishon.surf'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Netty
+    implementation(libs.netty.all)
+    implementation(libs.netty.incubator.codec.native.quic)
+
+    // Toml
+    implementation(libs.tomlj)
+
+    // Lombok
+    compileOnly(libs.lombok)
+    annotationProcessor(libs.lombok)
+
+    // JUnit Tests
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.jupiter)
+    testRuntimeOnly(libs.junit.platform.launcher)
+}
+
+test {
+    useJUnitPlatform()
+}
