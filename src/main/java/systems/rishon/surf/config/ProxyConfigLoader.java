@@ -7,6 +7,9 @@ import org.tomlj.TomlTable;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,5 +83,35 @@ public final class ProxyConfigLoader {
                 .toList();
 
         return new ProxyConfig(bindHost, bindPort, servers, joinOrder);
+    }
+
+    public static void generateConfig() {
+        Path configPath = Path.of("surf.toml");
+
+        if (Files.exists(configPath)) {
+            return;
+        }
+
+        try (InputStream inputStream =
+                     ProxyConfigLoader.class
+                             .getClassLoader()
+                             .getResourceAsStream("surf.toml")) {
+
+            if (inputStream == null) {
+                throw new RuntimeException("Default config template not found in resources");
+            }
+
+            Files.copy(
+                    inputStream,
+                    configPath,
+                    StandardCopyOption.REPLACE_EXISTING
+            );
+
+        } catch (IOException e) {
+            throw new RuntimeException(
+                    "Failed to generate default config file at " + configPath.toAbsolutePath(),
+                    e
+            );
+        }
     }
 }

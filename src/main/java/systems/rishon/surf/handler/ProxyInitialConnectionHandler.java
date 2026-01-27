@@ -25,7 +25,7 @@ public final class ProxyInitialConnectionHandler
                 new ProxyPlayerSession(sessionId);
 
         proxy.getLogger().info(
-                "Accepted QUIC client session " + sessionId
+                "Accepted client session " + sessionId
         );
 
         proxy.onPlayerConnect(session, quicChannel);

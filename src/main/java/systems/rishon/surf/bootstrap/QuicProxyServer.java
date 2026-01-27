@@ -56,7 +56,7 @@ public final class QuicProxyServer {
                 .handler(new SimpleChannelInboundHandler<QuicChannel>() {
                     @Override
                     protected void channelRead0(ChannelHandlerContext ctx, QuicChannel quicChannel) {
-                        proxy.getLogger().info("New QUIC connection: " + quicChannel);
+                        proxy.getLogger().info("New connection: " + quicChannel);
 
                         quicChannel.pipeline().addLast(
                                 new ProxyInitialConnectionHandler(proxy)
@@ -65,22 +65,26 @@ public final class QuicProxyServer {
                 })
                 .build();
 
-        Bootstrap bootstrap = new Bootstrap();
-        bootstrap.group(group)
-                .channel(NioDatagramChannel.class)
-                .handler(codec);
+        try {
+            Bootstrap bootstrap = new Bootstrap();
+            bootstrap.group(group)
+                    .channel(NioDatagramChannel.class)
+                    .handler(codec);
 
-        bootstrap.bind(
-                new InetSocketAddress(
-                        config.bindHost(),
-                        config.bindPort().intValue()
-                )
-        ).syncUninterruptibly();
+            bootstrap.bind(
+                    new InetSocketAddress(
+                            config.bindHost(),
+                            config.bindPort().intValue()
+                    )
+            ).syncUninterruptibly();
 
-        proxy.getLogger().info(
-                "QUIC proxy listening on "
-                        + config.bindHost() + ":" + config.bindPort()
-        );
+            proxy.getLogger().info(
+                    "Proxy listening on "
+                            + config.bindHost() + ":" + config.bindPort()
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to bind QUIC proxy server", e);
+        }
     }
 
     public void shutdown() {

@@ -23,6 +23,12 @@ dependencies {
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
 
+    // Zstd
+    implementation(libs.zstd)
+
+    // Annotation
+    implementation(libs.jsr305)
+
     // Security
     implementation(libs.bouncy.castle.prov)
     implementation(libs.bouncy.castle.pkix)

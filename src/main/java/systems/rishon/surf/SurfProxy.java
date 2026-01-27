@@ -9,8 +9,9 @@ import systems.rishon.surf.config.ProxyConfigLoader;
 import systems.rishon.surf.routing.JoinServerRouter;
 import systems.rishon.surf.session.ProxyPlayerSession;
 
-import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.logging.Logger;
 
 public class SurfProxy {
@@ -28,14 +29,12 @@ public class SurfProxy {
     }
 
     static void main(String[] args) throws Exception {
-        try (InputStream inputStream = SurfProxy.class.getClassLoader().getResourceAsStream("surf.toml")) {
-            if (inputStream == null) {
-                throw new FileNotFoundException("surf.toml not found in resources");
-            }
-            ProxyConfig config = ProxyConfigLoader.load(inputStream);
+        ProxyConfigLoader.generateConfig();
+
+        try (InputStream in = Files.newInputStream(Path.of("surf.toml"))) {
+            ProxyConfig config = ProxyConfigLoader.load(in);
             SurfProxy proxy = new SurfProxy(config);
             proxy.start();
-
             proxy.listenForShutdown(proxy.server);
         }
     }
