@@ -5,9 +5,10 @@ import com.hypixel.hytale.protocol.io.ProtocolException;
 import com.hypixel.hytale.protocol.io.ValidationResult;
 import com.hypixel.hytale.protocol.io.VarInt;
 import io.netty.buffer.ByteBuf;
-import java.util.Objects;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Objects;
 
 public class PlayerSkin {
     public static final int NULLABLE_BIT_FIELD_SIZE = 3;
@@ -499,298 +500,6 @@ public class PlayerSkin {
         return maxEnd;
     }
 
-    public void serialize(@Nonnull ByteBuf buf) {
-        int startPos = buf.writerIndex();
-        byte[] nullBits = new byte[3];
-        if (this.bodyCharacteristic != null) {
-            nullBits[0] = (byte)(nullBits[0] | 1);
-        }
-        if (this.underwear != null) {
-            nullBits[0] = (byte)(nullBits[0] | 2);
-        }
-        if (this.face != null) {
-            nullBits[0] = (byte)(nullBits[0] | 4);
-        }
-        if (this.eyes != null) {
-            nullBits[0] = (byte)(nullBits[0] | 8);
-        }
-        if (this.ears != null) {
-            nullBits[0] = (byte)(nullBits[0] | 0x10);
-        }
-        if (this.mouth != null) {
-            nullBits[0] = (byte)(nullBits[0] | 0x20);
-        }
-        if (this.facialHair != null) {
-            nullBits[0] = (byte)(nullBits[0] | 0x40);
-        }
-        if (this.haircut != null) {
-            nullBits[0] = (byte)(nullBits[0] | 0x80);
-        }
-        if (this.eyebrows != null) {
-            nullBits[1] = (byte)(nullBits[1] | 1);
-        }
-        if (this.pants != null) {
-            nullBits[1] = (byte)(nullBits[1] | 2);
-        }
-        if (this.overpants != null) {
-            nullBits[1] = (byte)(nullBits[1] | 4);
-        }
-        if (this.undertop != null) {
-            nullBits[1] = (byte)(nullBits[1] | 8);
-        }
-        if (this.overtop != null) {
-            nullBits[1] = (byte)(nullBits[1] | 0x10);
-        }
-        if (this.shoes != null) {
-            nullBits[1] = (byte)(nullBits[1] | 0x20);
-        }
-        if (this.headAccessory != null) {
-            nullBits[1] = (byte)(nullBits[1] | 0x40);
-        }
-        if (this.faceAccessory != null) {
-            nullBits[1] = (byte)(nullBits[1] | 0x80);
-        }
-        if (this.earAccessory != null) {
-            nullBits[2] = (byte)(nullBits[2] | 1);
-        }
-        if (this.skinFeature != null) {
-            nullBits[2] = (byte)(nullBits[2] | 2);
-        }
-        if (this.gloves != null) {
-            nullBits[2] = (byte)(nullBits[2] | 4);
-        }
-        if (this.cape != null) {
-            nullBits[2] = (byte)(nullBits[2] | 8);
-        }
-        buf.writeBytes(nullBits);
-        int bodyCharacteristicOffsetSlot = buf.writerIndex();
-        buf.writeIntLE(0);
-        int underwearOffsetSlot = buf.writerIndex();
-        buf.writeIntLE(0);
-        int faceOffsetSlot = buf.writerIndex();
-        buf.writeIntLE(0);
-        int eyesOffsetSlot = buf.writerIndex();
-        buf.writeIntLE(0);
-        int earsOffsetSlot = buf.writerIndex();
-        buf.writeIntLE(0);
-        int mouthOffsetSlot = buf.writerIndex();
-        buf.writeIntLE(0);
-        int facialHairOffsetSlot = buf.writerIndex();
-        buf.writeIntLE(0);
-        int haircutOffsetSlot = buf.writerIndex();
-        buf.writeIntLE(0);
-        int eyebrowsOffsetSlot = buf.writerIndex();
-        buf.writeIntLE(0);
-        int pantsOffsetSlot = buf.writerIndex();
-        buf.writeIntLE(0);
-        int overpantsOffsetSlot = buf.writerIndex();
-        buf.writeIntLE(0);
-        int undertopOffsetSlot = buf.writerIndex();
-        buf.writeIntLE(0);
-        int overtopOffsetSlot = buf.writerIndex();
-        buf.writeIntLE(0);
-        int shoesOffsetSlot = buf.writerIndex();
-        buf.writeIntLE(0);
-        int headAccessoryOffsetSlot = buf.writerIndex();
-        buf.writeIntLE(0);
-        int faceAccessoryOffsetSlot = buf.writerIndex();
-        buf.writeIntLE(0);
-        int earAccessoryOffsetSlot = buf.writerIndex();
-        buf.writeIntLE(0);
-        int skinFeatureOffsetSlot = buf.writerIndex();
-        buf.writeIntLE(0);
-        int glovesOffsetSlot = buf.writerIndex();
-        buf.writeIntLE(0);
-        int capeOffsetSlot = buf.writerIndex();
-        buf.writeIntLE(0);
-        int varBlockStart = buf.writerIndex();
-        if (this.bodyCharacteristic != null) {
-            buf.setIntLE(bodyCharacteristicOffsetSlot, buf.writerIndex() - varBlockStart);
-            PacketIO.writeVarString(buf, this.bodyCharacteristic, 4096000);
-        } else {
-            buf.setIntLE(bodyCharacteristicOffsetSlot, -1);
-        }
-        if (this.underwear != null) {
-            buf.setIntLE(underwearOffsetSlot, buf.writerIndex() - varBlockStart);
-            PacketIO.writeVarString(buf, this.underwear, 4096000);
-        } else {
-            buf.setIntLE(underwearOffsetSlot, -1);
-        }
-        if (this.face != null) {
-            buf.setIntLE(faceOffsetSlot, buf.writerIndex() - varBlockStart);
-            PacketIO.writeVarString(buf, this.face, 4096000);
-        } else {
-            buf.setIntLE(faceOffsetSlot, -1);
-        }
-        if (this.eyes != null) {
-            buf.setIntLE(eyesOffsetSlot, buf.writerIndex() - varBlockStart);
-            PacketIO.writeVarString(buf, this.eyes, 4096000);
-        } else {
-            buf.setIntLE(eyesOffsetSlot, -1);
-        }
-        if (this.ears != null) {
-            buf.setIntLE(earsOffsetSlot, buf.writerIndex() - varBlockStart);
-            PacketIO.writeVarString(buf, this.ears, 4096000);
-        } else {
-            buf.setIntLE(earsOffsetSlot, -1);
-        }
-        if (this.mouth != null) {
-            buf.setIntLE(mouthOffsetSlot, buf.writerIndex() - varBlockStart);
-            PacketIO.writeVarString(buf, this.mouth, 4096000);
-        } else {
-            buf.setIntLE(mouthOffsetSlot, -1);
-        }
-        if (this.facialHair != null) {
-            buf.setIntLE(facialHairOffsetSlot, buf.writerIndex() - varBlockStart);
-            PacketIO.writeVarString(buf, this.facialHair, 4096000);
-        } else {
-            buf.setIntLE(facialHairOffsetSlot, -1);
-        }
-        if (this.haircut != null) {
-            buf.setIntLE(haircutOffsetSlot, buf.writerIndex() - varBlockStart);
-            PacketIO.writeVarString(buf, this.haircut, 4096000);
-        } else {
-            buf.setIntLE(haircutOffsetSlot, -1);
-        }
-        if (this.eyebrows != null) {
-            buf.setIntLE(eyebrowsOffsetSlot, buf.writerIndex() - varBlockStart);
-            PacketIO.writeVarString(buf, this.eyebrows, 4096000);
-        } else {
-            buf.setIntLE(eyebrowsOffsetSlot, -1);
-        }
-        if (this.pants != null) {
-            buf.setIntLE(pantsOffsetSlot, buf.writerIndex() - varBlockStart);
-            PacketIO.writeVarString(buf, this.pants, 4096000);
-        } else {
-            buf.setIntLE(pantsOffsetSlot, -1);
-        }
-        if (this.overpants != null) {
-            buf.setIntLE(overpantsOffsetSlot, buf.writerIndex() - varBlockStart);
-            PacketIO.writeVarString(buf, this.overpants, 4096000);
-        } else {
-            buf.setIntLE(overpantsOffsetSlot, -1);
-        }
-        if (this.undertop != null) {
-            buf.setIntLE(undertopOffsetSlot, buf.writerIndex() - varBlockStart);
-            PacketIO.writeVarString(buf, this.undertop, 4096000);
-        } else {
-            buf.setIntLE(undertopOffsetSlot, -1);
-        }
-        if (this.overtop != null) {
-            buf.setIntLE(overtopOffsetSlot, buf.writerIndex() - varBlockStart);
-            PacketIO.writeVarString(buf, this.overtop, 4096000);
-        } else {
-            buf.setIntLE(overtopOffsetSlot, -1);
-        }
-        if (this.shoes != null) {
-            buf.setIntLE(shoesOffsetSlot, buf.writerIndex() - varBlockStart);
-            PacketIO.writeVarString(buf, this.shoes, 4096000);
-        } else {
-            buf.setIntLE(shoesOffsetSlot, -1);
-        }
-        if (this.headAccessory != null) {
-            buf.setIntLE(headAccessoryOffsetSlot, buf.writerIndex() - varBlockStart);
-            PacketIO.writeVarString(buf, this.headAccessory, 4096000);
-        } else {
-            buf.setIntLE(headAccessoryOffsetSlot, -1);
-        }
-        if (this.faceAccessory != null) {
-            buf.setIntLE(faceAccessoryOffsetSlot, buf.writerIndex() - varBlockStart);
-            PacketIO.writeVarString(buf, this.faceAccessory, 4096000);
-        } else {
-            buf.setIntLE(faceAccessoryOffsetSlot, -1);
-        }
-        if (this.earAccessory != null) {
-            buf.setIntLE(earAccessoryOffsetSlot, buf.writerIndex() - varBlockStart);
-            PacketIO.writeVarString(buf, this.earAccessory, 4096000);
-        } else {
-            buf.setIntLE(earAccessoryOffsetSlot, -1);
-        }
-        if (this.skinFeature != null) {
-            buf.setIntLE(skinFeatureOffsetSlot, buf.writerIndex() - varBlockStart);
-            PacketIO.writeVarString(buf, this.skinFeature, 4096000);
-        } else {
-            buf.setIntLE(skinFeatureOffsetSlot, -1);
-        }
-        if (this.gloves != null) {
-            buf.setIntLE(glovesOffsetSlot, buf.writerIndex() - varBlockStart);
-            PacketIO.writeVarString(buf, this.gloves, 4096000);
-        } else {
-            buf.setIntLE(glovesOffsetSlot, -1);
-        }
-        if (this.cape != null) {
-            buf.setIntLE(capeOffsetSlot, buf.writerIndex() - varBlockStart);
-            PacketIO.writeVarString(buf, this.cape, 4096000);
-        } else {
-            buf.setIntLE(capeOffsetSlot, -1);
-        }
-    }
-
-    public int computeSize() {
-        int size = 83;
-        if (this.bodyCharacteristic != null) {
-            size += PacketIO.stringSize(this.bodyCharacteristic);
-        }
-        if (this.underwear != null) {
-            size += PacketIO.stringSize(this.underwear);
-        }
-        if (this.face != null) {
-            size += PacketIO.stringSize(this.face);
-        }
-        if (this.eyes != null) {
-            size += PacketIO.stringSize(this.eyes);
-        }
-        if (this.ears != null) {
-            size += PacketIO.stringSize(this.ears);
-        }
-        if (this.mouth != null) {
-            size += PacketIO.stringSize(this.mouth);
-        }
-        if (this.facialHair != null) {
-            size += PacketIO.stringSize(this.facialHair);
-        }
-        if (this.haircut != null) {
-            size += PacketIO.stringSize(this.haircut);
-        }
-        if (this.eyebrows != null) {
-            size += PacketIO.stringSize(this.eyebrows);
-        }
-        if (this.pants != null) {
-            size += PacketIO.stringSize(this.pants);
-        }
-        if (this.overpants != null) {
-            size += PacketIO.stringSize(this.overpants);
-        }
-        if (this.undertop != null) {
-            size += PacketIO.stringSize(this.undertop);
-        }
-        if (this.overtop != null) {
-            size += PacketIO.stringSize(this.overtop);
-        }
-        if (this.shoes != null) {
-            size += PacketIO.stringSize(this.shoes);
-        }
-        if (this.headAccessory != null) {
-            size += PacketIO.stringSize(this.headAccessory);
-        }
-        if (this.faceAccessory != null) {
-            size += PacketIO.stringSize(this.faceAccessory);
-        }
-        if (this.earAccessory != null) {
-            size += PacketIO.stringSize(this.earAccessory);
-        }
-        if (this.skinFeature != null) {
-            size += PacketIO.stringSize(this.skinFeature);
-        }
-        if (this.gloves != null) {
-            size += PacketIO.stringSize(this.gloves);
-        }
-        if (this.cape != null) {
-            size += PacketIO.stringSize(this.cape);
-        }
-        return size;
-    }
-
     public static ValidationResult validateStructure(@Nonnull ByteBuf buffer, int offset) {
         int pos;
         if (buffer.readableBytes() - offset < 83) {
@@ -1220,6 +929,298 @@ public class PlayerSkin {
         return ValidationResult.OK;
     }
 
+    public void serialize(@Nonnull ByteBuf buf) {
+        int startPos = buf.writerIndex();
+        byte[] nullBits = new byte[3];
+        if (this.bodyCharacteristic != null) {
+            nullBits[0] = (byte) (nullBits[0] | 1);
+        }
+        if (this.underwear != null) {
+            nullBits[0] = (byte) (nullBits[0] | 2);
+        }
+        if (this.face != null) {
+            nullBits[0] = (byte) (nullBits[0] | 4);
+        }
+        if (this.eyes != null) {
+            nullBits[0] = (byte) (nullBits[0] | 8);
+        }
+        if (this.ears != null) {
+            nullBits[0] = (byte) (nullBits[0] | 0x10);
+        }
+        if (this.mouth != null) {
+            nullBits[0] = (byte) (nullBits[0] | 0x20);
+        }
+        if (this.facialHair != null) {
+            nullBits[0] = (byte) (nullBits[0] | 0x40);
+        }
+        if (this.haircut != null) {
+            nullBits[0] = (byte) (nullBits[0] | 0x80);
+        }
+        if (this.eyebrows != null) {
+            nullBits[1] = (byte) (nullBits[1] | 1);
+        }
+        if (this.pants != null) {
+            nullBits[1] = (byte) (nullBits[1] | 2);
+        }
+        if (this.overpants != null) {
+            nullBits[1] = (byte) (nullBits[1] | 4);
+        }
+        if (this.undertop != null) {
+            nullBits[1] = (byte) (nullBits[1] | 8);
+        }
+        if (this.overtop != null) {
+            nullBits[1] = (byte) (nullBits[1] | 0x10);
+        }
+        if (this.shoes != null) {
+            nullBits[1] = (byte) (nullBits[1] | 0x20);
+        }
+        if (this.headAccessory != null) {
+            nullBits[1] = (byte) (nullBits[1] | 0x40);
+        }
+        if (this.faceAccessory != null) {
+            nullBits[1] = (byte) (nullBits[1] | 0x80);
+        }
+        if (this.earAccessory != null) {
+            nullBits[2] = (byte) (nullBits[2] | 1);
+        }
+        if (this.skinFeature != null) {
+            nullBits[2] = (byte) (nullBits[2] | 2);
+        }
+        if (this.gloves != null) {
+            nullBits[2] = (byte) (nullBits[2] | 4);
+        }
+        if (this.cape != null) {
+            nullBits[2] = (byte) (nullBits[2] | 8);
+        }
+        buf.writeBytes(nullBits);
+        int bodyCharacteristicOffsetSlot = buf.writerIndex();
+        buf.writeIntLE(0);
+        int underwearOffsetSlot = buf.writerIndex();
+        buf.writeIntLE(0);
+        int faceOffsetSlot = buf.writerIndex();
+        buf.writeIntLE(0);
+        int eyesOffsetSlot = buf.writerIndex();
+        buf.writeIntLE(0);
+        int earsOffsetSlot = buf.writerIndex();
+        buf.writeIntLE(0);
+        int mouthOffsetSlot = buf.writerIndex();
+        buf.writeIntLE(0);
+        int facialHairOffsetSlot = buf.writerIndex();
+        buf.writeIntLE(0);
+        int haircutOffsetSlot = buf.writerIndex();
+        buf.writeIntLE(0);
+        int eyebrowsOffsetSlot = buf.writerIndex();
+        buf.writeIntLE(0);
+        int pantsOffsetSlot = buf.writerIndex();
+        buf.writeIntLE(0);
+        int overpantsOffsetSlot = buf.writerIndex();
+        buf.writeIntLE(0);
+        int undertopOffsetSlot = buf.writerIndex();
+        buf.writeIntLE(0);
+        int overtopOffsetSlot = buf.writerIndex();
+        buf.writeIntLE(0);
+        int shoesOffsetSlot = buf.writerIndex();
+        buf.writeIntLE(0);
+        int headAccessoryOffsetSlot = buf.writerIndex();
+        buf.writeIntLE(0);
+        int faceAccessoryOffsetSlot = buf.writerIndex();
+        buf.writeIntLE(0);
+        int earAccessoryOffsetSlot = buf.writerIndex();
+        buf.writeIntLE(0);
+        int skinFeatureOffsetSlot = buf.writerIndex();
+        buf.writeIntLE(0);
+        int glovesOffsetSlot = buf.writerIndex();
+        buf.writeIntLE(0);
+        int capeOffsetSlot = buf.writerIndex();
+        buf.writeIntLE(0);
+        int varBlockStart = buf.writerIndex();
+        if (this.bodyCharacteristic != null) {
+            buf.setIntLE(bodyCharacteristicOffsetSlot, buf.writerIndex() - varBlockStart);
+            PacketIO.writeVarString(buf, this.bodyCharacteristic, 4096000);
+        } else {
+            buf.setIntLE(bodyCharacteristicOffsetSlot, -1);
+        }
+        if (this.underwear != null) {
+            buf.setIntLE(underwearOffsetSlot, buf.writerIndex() - varBlockStart);
+            PacketIO.writeVarString(buf, this.underwear, 4096000);
+        } else {
+            buf.setIntLE(underwearOffsetSlot, -1);
+        }
+        if (this.face != null) {
+            buf.setIntLE(faceOffsetSlot, buf.writerIndex() - varBlockStart);
+            PacketIO.writeVarString(buf, this.face, 4096000);
+        } else {
+            buf.setIntLE(faceOffsetSlot, -1);
+        }
+        if (this.eyes != null) {
+            buf.setIntLE(eyesOffsetSlot, buf.writerIndex() - varBlockStart);
+            PacketIO.writeVarString(buf, this.eyes, 4096000);
+        } else {
+            buf.setIntLE(eyesOffsetSlot, -1);
+        }
+        if (this.ears != null) {
+            buf.setIntLE(earsOffsetSlot, buf.writerIndex() - varBlockStart);
+            PacketIO.writeVarString(buf, this.ears, 4096000);
+        } else {
+            buf.setIntLE(earsOffsetSlot, -1);
+        }
+        if (this.mouth != null) {
+            buf.setIntLE(mouthOffsetSlot, buf.writerIndex() - varBlockStart);
+            PacketIO.writeVarString(buf, this.mouth, 4096000);
+        } else {
+            buf.setIntLE(mouthOffsetSlot, -1);
+        }
+        if (this.facialHair != null) {
+            buf.setIntLE(facialHairOffsetSlot, buf.writerIndex() - varBlockStart);
+            PacketIO.writeVarString(buf, this.facialHair, 4096000);
+        } else {
+            buf.setIntLE(facialHairOffsetSlot, -1);
+        }
+        if (this.haircut != null) {
+            buf.setIntLE(haircutOffsetSlot, buf.writerIndex() - varBlockStart);
+            PacketIO.writeVarString(buf, this.haircut, 4096000);
+        } else {
+            buf.setIntLE(haircutOffsetSlot, -1);
+        }
+        if (this.eyebrows != null) {
+            buf.setIntLE(eyebrowsOffsetSlot, buf.writerIndex() - varBlockStart);
+            PacketIO.writeVarString(buf, this.eyebrows, 4096000);
+        } else {
+            buf.setIntLE(eyebrowsOffsetSlot, -1);
+        }
+        if (this.pants != null) {
+            buf.setIntLE(pantsOffsetSlot, buf.writerIndex() - varBlockStart);
+            PacketIO.writeVarString(buf, this.pants, 4096000);
+        } else {
+            buf.setIntLE(pantsOffsetSlot, -1);
+        }
+        if (this.overpants != null) {
+            buf.setIntLE(overpantsOffsetSlot, buf.writerIndex() - varBlockStart);
+            PacketIO.writeVarString(buf, this.overpants, 4096000);
+        } else {
+            buf.setIntLE(overpantsOffsetSlot, -1);
+        }
+        if (this.undertop != null) {
+            buf.setIntLE(undertopOffsetSlot, buf.writerIndex() - varBlockStart);
+            PacketIO.writeVarString(buf, this.undertop, 4096000);
+        } else {
+            buf.setIntLE(undertopOffsetSlot, -1);
+        }
+        if (this.overtop != null) {
+            buf.setIntLE(overtopOffsetSlot, buf.writerIndex() - varBlockStart);
+            PacketIO.writeVarString(buf, this.overtop, 4096000);
+        } else {
+            buf.setIntLE(overtopOffsetSlot, -1);
+        }
+        if (this.shoes != null) {
+            buf.setIntLE(shoesOffsetSlot, buf.writerIndex() - varBlockStart);
+            PacketIO.writeVarString(buf, this.shoes, 4096000);
+        } else {
+            buf.setIntLE(shoesOffsetSlot, -1);
+        }
+        if (this.headAccessory != null) {
+            buf.setIntLE(headAccessoryOffsetSlot, buf.writerIndex() - varBlockStart);
+            PacketIO.writeVarString(buf, this.headAccessory, 4096000);
+        } else {
+            buf.setIntLE(headAccessoryOffsetSlot, -1);
+        }
+        if (this.faceAccessory != null) {
+            buf.setIntLE(faceAccessoryOffsetSlot, buf.writerIndex() - varBlockStart);
+            PacketIO.writeVarString(buf, this.faceAccessory, 4096000);
+        } else {
+            buf.setIntLE(faceAccessoryOffsetSlot, -1);
+        }
+        if (this.earAccessory != null) {
+            buf.setIntLE(earAccessoryOffsetSlot, buf.writerIndex() - varBlockStart);
+            PacketIO.writeVarString(buf, this.earAccessory, 4096000);
+        } else {
+            buf.setIntLE(earAccessoryOffsetSlot, -1);
+        }
+        if (this.skinFeature != null) {
+            buf.setIntLE(skinFeatureOffsetSlot, buf.writerIndex() - varBlockStart);
+            PacketIO.writeVarString(buf, this.skinFeature, 4096000);
+        } else {
+            buf.setIntLE(skinFeatureOffsetSlot, -1);
+        }
+        if (this.gloves != null) {
+            buf.setIntLE(glovesOffsetSlot, buf.writerIndex() - varBlockStart);
+            PacketIO.writeVarString(buf, this.gloves, 4096000);
+        } else {
+            buf.setIntLE(glovesOffsetSlot, -1);
+        }
+        if (this.cape != null) {
+            buf.setIntLE(capeOffsetSlot, buf.writerIndex() - varBlockStart);
+            PacketIO.writeVarString(buf, this.cape, 4096000);
+        } else {
+            buf.setIntLE(capeOffsetSlot, -1);
+        }
+    }
+
+    public int computeSize() {
+        int size = 83;
+        if (this.bodyCharacteristic != null) {
+            size += PacketIO.stringSize(this.bodyCharacteristic);
+        }
+        if (this.underwear != null) {
+            size += PacketIO.stringSize(this.underwear);
+        }
+        if (this.face != null) {
+            size += PacketIO.stringSize(this.face);
+        }
+        if (this.eyes != null) {
+            size += PacketIO.stringSize(this.eyes);
+        }
+        if (this.ears != null) {
+            size += PacketIO.stringSize(this.ears);
+        }
+        if (this.mouth != null) {
+            size += PacketIO.stringSize(this.mouth);
+        }
+        if (this.facialHair != null) {
+            size += PacketIO.stringSize(this.facialHair);
+        }
+        if (this.haircut != null) {
+            size += PacketIO.stringSize(this.haircut);
+        }
+        if (this.eyebrows != null) {
+            size += PacketIO.stringSize(this.eyebrows);
+        }
+        if (this.pants != null) {
+            size += PacketIO.stringSize(this.pants);
+        }
+        if (this.overpants != null) {
+            size += PacketIO.stringSize(this.overpants);
+        }
+        if (this.undertop != null) {
+            size += PacketIO.stringSize(this.undertop);
+        }
+        if (this.overtop != null) {
+            size += PacketIO.stringSize(this.overtop);
+        }
+        if (this.shoes != null) {
+            size += PacketIO.stringSize(this.shoes);
+        }
+        if (this.headAccessory != null) {
+            size += PacketIO.stringSize(this.headAccessory);
+        }
+        if (this.faceAccessory != null) {
+            size += PacketIO.stringSize(this.faceAccessory);
+        }
+        if (this.earAccessory != null) {
+            size += PacketIO.stringSize(this.earAccessory);
+        }
+        if (this.skinFeature != null) {
+            size += PacketIO.stringSize(this.skinFeature);
+        }
+        if (this.gloves != null) {
+            size += PacketIO.stringSize(this.gloves);
+        }
+        if (this.cape != null) {
+            size += PacketIO.stringSize(this.cape);
+        }
+        return size;
+    }
+
     public PlayerSkin clone() {
         PlayerSkin copy = new PlayerSkin();
         copy.bodyCharacteristic = this.bodyCharacteristic;
@@ -1252,7 +1253,7 @@ public class PlayerSkin {
         if (!(obj instanceof PlayerSkin)) {
             return false;
         }
-        PlayerSkin other = (PlayerSkin)obj;
+        PlayerSkin other = (PlayerSkin) obj;
         return Objects.equals(this.bodyCharacteristic, other.bodyCharacteristic) && Objects.equals(this.underwear, other.underwear) && Objects.equals(this.face, other.face) && Objects.equals(this.eyes, other.eyes) && Objects.equals(this.ears, other.ears) && Objects.equals(this.mouth, other.mouth) && Objects.equals(this.facialHair, other.facialHair) && Objects.equals(this.haircut, other.haircut) && Objects.equals(this.eyebrows, other.eyebrows) && Objects.equals(this.pants, other.pants) && Objects.equals(this.overpants, other.overpants) && Objects.equals(this.undertop, other.undertop) && Objects.equals(this.overtop, other.overtop) && Objects.equals(this.shoes, other.shoes) && Objects.equals(this.headAccessory, other.headAccessory) && Objects.equals(this.faceAccessory, other.faceAccessory) && Objects.equals(this.earAccessory, other.earAccessory) && Objects.equals(this.skinFeature, other.skinFeature) && Objects.equals(this.gloves, other.gloves) && Objects.equals(this.cape, other.cape);
     }
 

@@ -5,8 +5,8 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
-import io.netty.handler.codec.quic.QuicChannel;
-import io.netty.handler.codec.quic.QuicTransportError;
+import io.netty.incubator.codec.quic.QuicChannel;
+import io.netty.incubator.codec.quic.QuicTransportError;
 import io.netty.util.AttributeKey;
 
 import javax.annotation.Nonnull;

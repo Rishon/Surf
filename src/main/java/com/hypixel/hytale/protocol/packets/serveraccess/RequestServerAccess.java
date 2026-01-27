@@ -2,10 +2,10 @@ package com.hypixel.hytale.protocol.packets.serveraccess;
 
 import com.hypixel.hytale.protocol.Packet;
 import com.hypixel.hytale.protocol.io.ValidationResult;
-import com.hypixel.hytale.protocol.packets.serveraccess.Access;
 import io.netty.buffer.ByteBuf;
-import java.util.Objects;
+
 import javax.annotation.Nonnull;
+import java.util.Objects;
 
 public class RequestServerAccess
         implements Packet {
@@ -19,11 +19,6 @@ public class RequestServerAccess
     @Nonnull
     public Access access = Access.Private;
     public short externalPort;
-
-    @Override
-    public int getId() {
-        return 250;
-    }
 
     public RequestServerAccess() {
     }
@@ -50,6 +45,18 @@ public class RequestServerAccess
         return 3;
     }
 
+    public static ValidationResult validateStructure(@Nonnull ByteBuf buffer, int offset) {
+        if (buffer.readableBytes() - offset < 3) {
+            return ValidationResult.error("Buffer too small: expected at least 3 bytes");
+        }
+        return ValidationResult.OK;
+    }
+
+    @Override
+    public int getId() {
+        return 250;
+    }
+
     @Override
     public void serialize(@Nonnull ByteBuf buf) {
         buf.writeByte(this.access.getValue());
@@ -59,13 +66,6 @@ public class RequestServerAccess
     @Override
     public int computeSize() {
         return 3;
-    }
-
-    public static ValidationResult validateStructure(@Nonnull ByteBuf buffer, int offset) {
-        if (buffer.readableBytes() - offset < 3) {
-            return ValidationResult.error("Buffer too small: expected at least 3 bytes");
-        }
-        return ValidationResult.OK;
     }
 
     public RequestServerAccess clone() {
@@ -82,8 +82,8 @@ public class RequestServerAccess
         if (!(obj instanceof RequestServerAccess)) {
             return false;
         }
-        RequestServerAccess other = (RequestServerAccess)obj;
-        return Objects.equals((Object)this.access, (Object)other.access) && this.externalPort == other.externalPort;
+        RequestServerAccess other = (RequestServerAccess) obj;
+        return Objects.equals((Object) this.access, (Object) other.access) && this.externalPort == other.externalPort;
     }
 
     public int hashCode() {

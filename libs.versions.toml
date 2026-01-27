@@ -1,21 +1,24 @@
 [versions]
-netty = "4.2.9.Final"
+netty = "4.1.114.Final"
+netty-incubator = "0.0.74.Final"
 junit = "5.10.1"
 tomlj = "1.1.1"
 lombok = "1.18.42"
 
 [libraries]
-netty-all = { module = "io.netty:netty-all", version.ref = "netty" }
-netty-incubator-codec-native-quic = { module = "io.netty.incubator:netty-incubator-codec-native-quic", version = "0.0.74.Final" }
+netty-transport = { module = "io.netty:netty-transport", version.ref = "netty" }
+netty-handler = { module = "io.netty:netty-handler", version.ref = "netty" }
+netty-codec = { module = "io.netty:netty-codec", version.ref = "netty" }
+
+netty-incubator-codec-native-quic = { module = "io.netty.incubator:netty-incubator-codec-native-quic", version.ref = "netty-incubator" }
+netty-incubator-codec-classes-quic = { module = "io.netty.incubator:netty-incubator-codec-classes-quic", version.ref = "netty-incubator" }
 
 bouncy-castle-prov = { module = "org.bouncycastle:bcprov-jdk18on", version = "1.83" }
 bouncy-castle-pkix = { module = "org.bouncycastle:bcpkix-jdk18on", version = "1.83" }
 
 tomlj = { module = "org.tomlj:tomlj", version.ref = "tomlj" }
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
-
 jsr305 = { module = "com.google.code.findbugs:jsr305", version = "3.0.2" }
-
 zstd = { module = "com.github.luben:zstd-jni", version = "1.5.7-6" }
 
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }

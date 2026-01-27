@@ -1,6 +1,7 @@
 package com.hypixel.hytale.protocol;
 
 import io.netty.buffer.ByteBuf;
+
 import javax.annotation.Nonnull;
 
 public interface Packet {

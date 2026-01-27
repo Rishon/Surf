@@ -5,11 +5,11 @@ import com.hypixel.hytale.protocol.io.PacketIO;
 import com.hypixel.hytale.protocol.io.ProtocolException;
 import com.hypixel.hytale.protocol.io.ValidationResult;
 import com.hypixel.hytale.protocol.io.VarInt;
-import com.hypixel.hytale.protocol.packets.serveraccess.Access;
 import io.netty.buffer.ByteBuf;
-import java.util.Objects;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Objects;
 
 public class SetServerAccess
         implements Packet {
@@ -24,11 +24,6 @@ public class SetServerAccess
     public Access access = Access.Private;
     @Nullable
     public String password;
-
-    @Override
-    public int getId() {
-        return 252;
-    }
 
     public SetServerAccess() {
     }
@@ -74,28 +69,6 @@ public class SetServerAccess
         return pos - offset;
     }
 
-    @Override
-    public void serialize(@Nonnull ByteBuf buf) {
-        int nullBits = 0;
-        if (this.password != null) {
-            nullBits = (byte)(nullBits | 1);
-        }
-        buf.writeByte(nullBits);
-        buf.writeByte(this.access.getValue());
-        if (this.password != null) {
-            PacketIO.writeVarString(buf, this.password, 4096000);
-        }
-    }
-
-    @Override
-    public int computeSize() {
-        int size = 2;
-        if (this.password != null) {
-            size += PacketIO.stringSize(this.password);
-        }
-        return size;
-    }
-
     public static ValidationResult validateStructure(@Nonnull ByteBuf buffer, int offset) {
         if (buffer.readableBytes() - offset < 2) {
             return ValidationResult.error("Buffer too small: expected at least 2 bytes");
@@ -118,6 +91,33 @@ public class SetServerAccess
         return ValidationResult.OK;
     }
 
+    @Override
+    public int getId() {
+        return 252;
+    }
+
+    @Override
+    public void serialize(@Nonnull ByteBuf buf) {
+        int nullBits = 0;
+        if (this.password != null) {
+            nullBits = (byte) (nullBits | 1);
+        }
+        buf.writeByte(nullBits);
+        buf.writeByte(this.access.getValue());
+        if (this.password != null) {
+            PacketIO.writeVarString(buf, this.password, 4096000);
+        }
+    }
+
+    @Override
+    public int computeSize() {
+        int size = 2;
+        if (this.password != null) {
+            size += PacketIO.stringSize(this.password);
+        }
+        return size;
+    }
+
     public SetServerAccess clone() {
         SetServerAccess copy = new SetServerAccess();
         copy.access = this.access;
@@ -132,8 +132,8 @@ public class SetServerAccess
         if (!(obj instanceof SetServerAccess)) {
             return false;
         }
-        SetServerAccess other = (SetServerAccess)obj;
-        return Objects.equals((Object)this.access, (Object)other.access) && Objects.equals(this.password, other.password);
+        SetServerAccess other = (SetServerAccess) obj;
+        return Objects.equals((Object) this.access, (Object) other.access) && Objects.equals(this.password, other.password);
     }
 
     public int hashCode() {

@@ -9,14 +9,15 @@ public enum Access {
     Open(3);
 
     public static final Access[] VALUES;
+
+    static {
+        VALUES = Access.values();
+    }
+
     private final int value;
 
     private Access(int value) {
         this.value = value;
-    }
-
-    public int getValue() {
-        return this.value;
     }
 
     public static Access fromValue(int value) {
@@ -26,7 +27,7 @@ public enum Access {
         throw ProtocolException.invalidEnumValue("Access", value);
     }
 
-    static {
-        VALUES = Access.values();
+    public int getValue() {
+        return this.value;
     }
 }

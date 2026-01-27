@@ -5,8 +5,9 @@ import com.hypixel.hytale.protocol.io.ProtocolException;
 import com.hypixel.hytale.protocol.io.ValidationResult;
 import com.hypixel.hytale.protocol.io.VarInt;
 import io.netty.buffer.ByteBuf;
-import java.util.Objects;
+
 import javax.annotation.Nonnull;
+import java.util.Objects;
 
 public class Asset {
     public static final int NULLABLE_BIT_FIELD_SIZE = 0;
@@ -57,16 +58,6 @@ public class Asset {
         return pos - offset;
     }
 
-    public void serialize(@Nonnull ByteBuf buf) {
-        PacketIO.writeFixedAsciiString(buf, this.hash, 64);
-        PacketIO.writeVarString(buf, this.name, 512);
-    }
-
-    public int computeSize() {
-        int size = 64;
-        return size += PacketIO.stringSize(this.name);
-    }
-
     public static ValidationResult validateStructure(@Nonnull ByteBuf buffer, int offset) {
         if (buffer.readableBytes() - offset < 64) {
             return ValidationResult.error("Buffer too small: expected at least 64 bytes");
@@ -86,6 +77,16 @@ public class Asset {
         return ValidationResult.OK;
     }
 
+    public void serialize(@Nonnull ByteBuf buf) {
+        PacketIO.writeFixedAsciiString(buf, this.hash, 64);
+        PacketIO.writeVarString(buf, this.name, 512);
+    }
+
+    public int computeSize() {
+        int size = 64;
+        return size += PacketIO.stringSize(this.name);
+    }
+
     public Asset clone() {
         Asset copy = new Asset();
         copy.hash = this.hash;
@@ -100,7 +101,7 @@ public class Asset {
         if (!(obj instanceof Asset)) {
             return false;
         }
-        Asset other = (Asset)obj;
+        Asset other = (Asset) obj;
         return Objects.equals(this.hash, other.hash) && Objects.equals(this.name, other.name);
     }
 

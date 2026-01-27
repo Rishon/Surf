@@ -5,12 +5,12 @@ import com.hypixel.hytale.protocol.Packet;
 import com.hypixel.hytale.protocol.io.ProtocolException;
 import com.hypixel.hytale.protocol.io.ValidationResult;
 import com.hypixel.hytale.protocol.io.VarInt;
-import com.hypixel.hytale.protocol.packets.serveraccess.Access;
 import io.netty.buffer.ByteBuf;
-import java.util.Arrays;
-import java.util.Objects;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class UpdateServerAccess
         implements Packet {
@@ -25,11 +25,6 @@ public class UpdateServerAccess
     public Access access = Access.Private;
     @Nullable
     public HostAddress[] hosts;
-
-    @Override
-    public int getId() {
-        return 251;
-    }
 
     public UpdateServerAccess() {
     }
@@ -59,7 +54,7 @@ public class UpdateServerAccess
                 throw ProtocolException.arrayTooLong("Hosts", hostsCount, 4096000);
             }
             int hostsVarLen = VarInt.size(hostsCount);
-            if ((long)(pos + hostsVarLen) + (long)hostsCount * 2L > (long)buf.readableBytes()) {
+            if ((long) (pos + hostsVarLen) + (long) hostsCount * 2L > (long) buf.readableBytes()) {
                 throw ProtocolException.bufferTooSmall("Hosts", pos + hostsVarLen + hostsCount * 2, buf.readableBytes());
             }
             pos += hostsVarLen;
@@ -83,38 +78,6 @@ public class UpdateServerAccess
             }
         }
         return pos - offset;
-    }
-
-    @Override
-    public void serialize(@Nonnull ByteBuf buf) {
-        int nullBits = 0;
-        if (this.hosts != null) {
-            nullBits = (byte)(nullBits | 1);
-        }
-        buf.writeByte(nullBits);
-        buf.writeByte(this.access.getValue());
-        if (this.hosts != null) {
-            if (this.hosts.length > 4096000) {
-                throw ProtocolException.arrayTooLong("Hosts", this.hosts.length, 4096000);
-            }
-            VarInt.write(buf, this.hosts.length);
-            for (HostAddress item : this.hosts) {
-                item.serialize(buf);
-            }
-        }
-    }
-
-    @Override
-    public int computeSize() {
-        int size = 2;
-        if (this.hosts != null) {
-            int hostsSize = 0;
-            for (HostAddress elem : this.hosts) {
-                hostsSize += elem.computeSize();
-            }
-            size += VarInt.size(this.hosts.length) + hostsSize;
-        }
-        return size;
     }
 
     public static ValidationResult validateStructure(@Nonnull ByteBuf buffer, int offset) {
@@ -143,10 +106,47 @@ public class UpdateServerAccess
         return ValidationResult.OK;
     }
 
+    @Override
+    public int getId() {
+        return 251;
+    }
+
+    @Override
+    public void serialize(@Nonnull ByteBuf buf) {
+        int nullBits = 0;
+        if (this.hosts != null) {
+            nullBits = (byte) (nullBits | 1);
+        }
+        buf.writeByte(nullBits);
+        buf.writeByte(this.access.getValue());
+        if (this.hosts != null) {
+            if (this.hosts.length > 4096000) {
+                throw ProtocolException.arrayTooLong("Hosts", this.hosts.length, 4096000);
+            }
+            VarInt.write(buf, this.hosts.length);
+            for (HostAddress item : this.hosts) {
+                item.serialize(buf);
+            }
+        }
+    }
+
+    @Override
+    public int computeSize() {
+        int size = 2;
+        if (this.hosts != null) {
+            int hostsSize = 0;
+            for (HostAddress elem : this.hosts) {
+                hostsSize += elem.computeSize();
+            }
+            size += VarInt.size(this.hosts.length) + hostsSize;
+        }
+        return size;
+    }
+
     public UpdateServerAccess clone() {
         UpdateServerAccess copy = new UpdateServerAccess();
         copy.access = this.access;
-        copy.hosts = this.hosts != null ? (HostAddress[])Arrays.stream(this.hosts).map(e -> e.clone()).toArray(HostAddress[]::new) : null;
+        copy.hosts = this.hosts != null ? (HostAddress[]) Arrays.stream(this.hosts).map(e -> e.clone()).toArray(HostAddress[]::new) : null;
         return copy;
     }
 
@@ -157,13 +157,13 @@ public class UpdateServerAccess
         if (!(obj instanceof UpdateServerAccess)) {
             return false;
         }
-        UpdateServerAccess other = (UpdateServerAccess)obj;
-        return Objects.equals((Object)this.access, (Object)other.access) && Arrays.equals(this.hosts, other.hosts);
+        UpdateServerAccess other = (UpdateServerAccess) obj;
+        return Objects.equals((Object) this.access, (Object) other.access) && Arrays.equals(this.hosts, other.hosts);
     }
 
     public int hashCode() {
         int result = 1;
-        result = 31 * result + Objects.hashCode((Object)this.access);
+        result = 31 * result + Objects.hashCode((Object) this.access);
         result = 31 * result + Arrays.hashCode(this.hosts);
         return result;
     }

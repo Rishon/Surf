@@ -16,8 +16,9 @@ public class PacketEncoder
         extends MessageToByteEncoder<Packet> {
     @Override
     protected void encode(@Nonnull ChannelHandlerContext ctx, @Nonnull Packet packet, @Nonnull ByteBuf out) {
-        Class<Object> packetClass;
-        if (packet instanceof CachedPacket cached) {
+        Class<? extends Packet> packetClass;
+        if (packet instanceof CachedPacket) {
+            CachedPacket cached = (CachedPacket) packet;
             packetClass = cached.getPacketType();
         } else {
             packetClass = packet.getClass();

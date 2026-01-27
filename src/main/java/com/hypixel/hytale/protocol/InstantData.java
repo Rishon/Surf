@@ -2,8 +2,9 @@ package com.hypixel.hytale.protocol;
 
 import com.hypixel.hytale.protocol.io.ValidationResult;
 import io.netty.buffer.ByteBuf;
-import java.util.Objects;
+
 import javax.annotation.Nonnull;
+import java.util.Objects;
 
 public class InstantData {
     public static final int NULLABLE_BIT_FIELD_SIZE = 0;
@@ -39,6 +40,13 @@ public class InstantData {
         return 12;
     }
 
+    public static ValidationResult validateStructure(@Nonnull ByteBuf buffer, int offset) {
+        if (buffer.readableBytes() - offset < 12) {
+            return ValidationResult.error("Buffer too small: expected at least 12 bytes");
+        }
+        return ValidationResult.OK;
+    }
+
     public void serialize(@Nonnull ByteBuf buf) {
         buf.writeLongLE(this.seconds);
         buf.writeIntLE(this.nanos);
@@ -46,13 +54,6 @@ public class InstantData {
 
     public int computeSize() {
         return 12;
-    }
-
-    public static ValidationResult validateStructure(@Nonnull ByteBuf buffer, int offset) {
-        if (buffer.readableBytes() - offset < 12) {
-            return ValidationResult.error("Buffer too small: expected at least 12 bytes");
-        }
-        return ValidationResult.OK;
     }
 
     public InstantData clone() {
@@ -69,7 +70,7 @@ public class InstantData {
         if (!(obj instanceof InstantData)) {
             return false;
         }
-        InstantData other = (InstantData)obj;
+        InstantData other = (InstantData) obj;
         return this.seconds == other.seconds && this.nanos == other.nanos;
     }
 

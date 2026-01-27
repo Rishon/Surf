@@ -1,32 +1,39 @@
 package systems.rishon.surf.session;
 
-import io.netty.incubator.codec.quic.QuicChannel;
+import io.netty.incubator.codec.quic.QuicStreamChannel;
+import lombok.Getter;
+import lombok.Setter;
 import systems.rishon.surf.config.BackendServer;
 
 public final class ProxyPlayerSession {
-
+    @Getter
     private final String sessionId;
+    @Getter
     private BackendServer connectedServer;
-    private QuicChannel clientChannel;
+    @Getter
+    private QuicStreamChannel clientStream;
+    @Getter
+    @Setter
+    private QuicStreamChannel backendStream;
 
     public ProxyPlayerSession(String sessionId) {
         this.sessionId = sessionId;
     }
 
-    public String sessionId() {
-        return sessionId;
+    public void attachClientStream(QuicStreamChannel stream) {
+        this.clientStream = stream;
     }
 
-    public void attachClientChannel(QuicChannel channel) {
-        this.clientChannel = channel;
+    public void attachBackendStream(QuicStreamChannel stream) {
+        this.backendStream = stream;
     }
 
-    public QuicChannel clientChannel() {
-        return clientChannel;
+    public QuicStreamChannel clientStream() {
+        return clientStream;
     }
 
-    public BackendServer connectedServer() {
-        return connectedServer;
+    public QuicStreamChannel backendStream() {
+        return backendStream;
     }
 
     public void connectTo(BackendServer server) {

@@ -4,7 +4,9 @@ plugins {
 }
 
 group = 'systems.rishon.surf'
-version = '0.1'
+version = '0.2'
+
+String quicVersion = "0.0.74.Final"
 
 repositories {
     mavenCentral()
@@ -12,9 +14,14 @@ repositories {
 
 dependencies {
     // Netty
-    implementation(libs.netty.all)
+    implementation(libs.netty.transport)
+    implementation(libs.netty.handler)
+    implementation(libs.netty.codec)
+
     implementation(libs.netty.incubator.codec.native.quic)
-    runtimeOnly("io.netty.incubator:netty-incubator-codec-native-quic:0.0.74.Final:linux-x86_64")
+    implementation(libs.netty.incubator.codec.classes.quic)
+
+    runtimeOnly "io.netty.incubator:netty-incubator-codec-native-quic:${quicVersion}:linux-x86_64"
 
     // Toml
     implementation(libs.tomlj)

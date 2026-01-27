@@ -70,7 +70,7 @@ public interface PacketStatsRecorder {
     }
 
     record RecentStats(int count, long uncompressedTotal, long compressedTotal, int uncompressedMin,
-                              int uncompressedMax, int compressedMin, int compressedMax) {
+                       int uncompressedMax, int compressedMin, int compressedMax) {
         public static final RecentStats EMPTY = new RecentStats(0, 0L, 0L, 0, 0, 0, 0);
     }
 }

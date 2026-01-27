@@ -5,8 +5,9 @@ import com.hypixel.hytale.protocol.io.ProtocolException;
 import com.hypixel.hytale.protocol.io.ValidationResult;
 import com.hypixel.hytale.protocol.io.VarInt;
 import io.netty.buffer.ByteBuf;
-import java.util.Objects;
+
 import javax.annotation.Nonnull;
+import java.util.Objects;
 
 public class HostAddress {
     public static final int NULLABLE_BIT_FIELD_SIZE = 0;
@@ -56,16 +57,6 @@ public class HostAddress {
         return pos - offset;
     }
 
-    public void serialize(@Nonnull ByteBuf buf) {
-        buf.writeShortLE(this.port);
-        PacketIO.writeVarString(buf, this.host, 256);
-    }
-
-    public int computeSize() {
-        int size = 2;
-        return size += PacketIO.stringSize(this.host);
-    }
-
     public static ValidationResult validateStructure(@Nonnull ByteBuf buffer, int offset) {
         if (buffer.readableBytes() - offset < 2) {
             return ValidationResult.error("Buffer too small: expected at least 2 bytes");
@@ -85,6 +76,16 @@ public class HostAddress {
         return ValidationResult.OK;
     }
 
+    public void serialize(@Nonnull ByteBuf buf) {
+        buf.writeShortLE(this.port);
+        PacketIO.writeVarString(buf, this.host, 256);
+    }
+
+    public int computeSize() {
+        int size = 2;
+        return size += PacketIO.stringSize(this.host);
+    }
+
     public HostAddress clone() {
         HostAddress copy = new HostAddress();
         copy.host = this.host;
@@ -99,7 +100,7 @@ public class HostAddress {
         if (!(obj instanceof HostAddress)) {
             return false;
         }
-        HostAddress other = (HostAddress)obj;
+        HostAddress other = (HostAddress) obj;
         return Objects.equals(this.host, other.host) && this.port == other.port;
     }
 
